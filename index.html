@@ -7,17 +7,65 @@
   <title>Change_me</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="">
-  <link rel="stylesheet" href="css/style.css">
-  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <datalist id="tickmarks">
+    <option value="12" label="12"></option>
+    <option value="24" label="24"></option>
+    <option value="36" label="36"></option>
+    <option value="48" label="48"></option>
+    <option value="60" label="60"></option>
+  </datalist>
 </head>
 
 <body>
   
-<div class="container">
-  
+<div class="container" id="calc">
+  <div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'rent')">Täisteenusrent</button>
+    <button class="tablinks" onclick="openTab(event, 'buy')">Rent-väljaost</button>
+  </div>
+  <div id="rent" class="tabcontent">
+    <input type="range" list="tickmarks" step="12" min="12" max="60" id="monthRange1"
+           oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
+    <span class="monthVal">36</span>
+    <div id="rentAmount" class="result"><span>36</span></div>
+  </div>
+
+
+  <div id="buy" class="tabcontent">
+    <input type="number" min="100">
+    <input type="range" list="tickmarks" step="12" min="12" max="60" id="monthRange2"
+           oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
+    <span class="monthVal">36</span>
+    <div id="buyAmount" class="result"><span>36</span></div>
+  </div>
+
 </div>
 
 <script>
+
+  function showVal(id, newVal){
+    if (id === "monthRange1") {
+      document.getElementsByClassName("monthVal")[0].innerHTML=newVal;
+    }
+    else {
+      document.getElementsByClassName("monthVal")[1].innerHTML=newVal;
+    }
+  }
+
+  function openTab(evt, name) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(name).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
 </script>
 
 </body>
