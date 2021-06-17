@@ -7,37 +7,36 @@
   <title>Change_me</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="">
-  <link rel="stylesheet" href="style.css">
-  <datalist id="tickmarks">
-    <option value="12" label="12"></option>
-    <option value="24" label="24"></option>
-    <option value="36" label="36"></option>
-    <option value="48" label="48"></option>
-    <option value="60" label="60"></option>
-  </datalist>
 </head>
-
-<body>
-  
+<datalist id="tickmarks">
+  <option value="12" label="12"></option>
+  <option value="24" label="24"></option>
+  <option value="36" label="36"></option>
+  <option value="48" label="48"></option>
+  <option value="60" label="60"></option>
+</datalist>
 <div class="container" id="calc">
   <div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'rent')">Täisteenusrent</button>
+    <button class="tablinks active" onclick="openTab(event, 'rent')">Täisteenusrent</button>
     <button class="tablinks" onclick="openTab(event, 'buy')">Rent-väljaost</button>
   </div>
-  <div id="rent" class="tabcontent">
-    <input type="range" list="tickmarks" step="12" min="12" max="60" id="monthRange1"
+  <div id="rent" class="tabcontent" style="display: block">
+    <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeRent"
            oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
     <span class="monthVal">36</span>
-    <div id="rentAmount" class="result"><span>36</span></div>
+    <div id="rentAmount" style="background-color: #F8CC0F" class="result">
+      <p>36</p></div>
   </div>
 
 
   <div id="buy" class="tabcontent">
     <input type="number" min="100">
-    <input type="range" list="tickmarks" step="12" min="12" max="60" id="monthRange2"
+    <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeBuy"
            oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
     <span class="monthVal">36</span>
-    <div id="buyAmount" class="result"><span>36</span></div>
+    <div id="buyAmount" class="result">
+      <p>36</p>
+    </div>
   </div>
 
 </div>
@@ -45,7 +44,7 @@
 <script>
 
   function showVal(id, newVal){
-    if (id === "monthRange1") {
+    if (id === "monthRangeRent") {
       document.getElementsByClassName("monthVal")[0].innerHTML=newVal;
     }
     else {
@@ -67,6 +66,109 @@
     evt.currentTarget.className += " active";
   }
 </script>
+<style>
+  body {
+    background-color: #324158;
+  }
 
+  #calc {
+    width: 395px;
+    height: 148px;
+    background-color: #324158;
+    font-family: Avenir,sans-serif;
+
+
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin: auto;
+  }
+
+
+  /* Style the tab */
+  .tab {
+    font-family : inherit;
+    overflow: hidden;
+    background-color: #324158;
+    height: 30px;
+  }
+
+  /* Style the buttons inside the tab */
+  .tab button {
+    font-family: inherit;
+    letter-spacing: 0.05em;
+    font-weight: bold;
+    float: left;
+    border: none;
+    border-bottom: 2px solid white;
+    cursor: pointer;
+    height: 100%;
+    width: 50%;
+    transition: 0.3s;
+    font-size: 20px;
+    background-color: #324158;
+    color: #e3e3e3;
+    text-align: center;
+  }
+
+  /* Change background color of buttons on hover */
+  .tab button:hover {
+    background-color: #3d4e66;
+
+  }
+
+  /* Create an active/current tablink class */
+  .tab button.active {
+    border-bottom: 5px solid #F8CC0F;
+  }
+
+  /* Style the tab content */
+  .tabcontent {
+    position: relative;
+    height: 100%;
+    display: none;
+    border: 2px solid white;
+    border-top: none;
+    padding: 10px 10px 10px;
+  }
+
+  .result {
+    width: 100%;
+    margin: 0 -10px;
+    background-color: green;
+    position: absolute;
+    bottom: 0;
+  }
+
+  .range {
+    -webkit-appearance: none;
+    width: 75%;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+
+  .range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #04AA6D;
+    cursor: pointer;
+  }
+
+  .range::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #04AA6D;
+    cursor: pointer;
+  }
+</style>
 </body>
 </html>
