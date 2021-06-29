@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 
 <head>
   <meta name="description" content="Webpage description goes here" />
@@ -8,31 +8,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="">
 </head>
+<body>
 <datalist id="tickmarks">
-  <option value="12" label="12"></option>
-  <option value="24" label="24"></option>
-  <option value="36" label="36"></option>
-  <option value="48" label="48"></option>
-  <option value="60" label="60"></option>
+  <option value="12" label="0"></option>
+  <option value="24" label="25"></option>
+  <option value="36" label="50"></option>
+  <option value="48" label="75"></option>
+  <option value="60" label="100"></option>
 </datalist>
 <div class="container" id="calc">
   <div class="tab">
     <button class="tablinks active" onclick="openTab(event, 'rent')">Täisteenusrent</button>
     <button class="tablinks" onclick="openTab(event, 'buy')">Rent-väljaost</button>
   </div>
-  <div id="rent" class="tabcontent" style="display: block">
-    <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeRent"
-           oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
-    <span class="monthVal">36</span>
+  <div id="rent" class="tabContent" style="display: block">
+    <div class="vars">
+      <div class="monthSlider" id="monthSliderRent">
+        <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeRent"
+               oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
+        <div id="rangeDotsRent" class="rangeDots"></div>
+      </div>
+      <div class="monthVal">
+        <p  id="monthValRent">36</p>
+      </div>
+    </div>
     <div id="rentAmount" style="background-color: #F8CC0F" class="result">
-      <p>36</p></div>
+      <p>36</p>
+    </div>
   </div>
 
 
-  <div id="buy" class="tabcontent">
-    <input type="number" min="100">
-    <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeBuy"
-           oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
+  <div id="buy" class="tabContent">
+    <div class="vars">
+      <input type="number" min="100">
+      <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeBuy"
+             oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
+      <div id="rangeDotsBuy" class="rangeDots"></div>
+      <div class="monthVal">
+        <p id="monthValBuy">36</p>
+      </div>
+    </div>
     <span class="monthVal">36</span>
     <div id="buyAmount" class="result">
       <p>36</p>
@@ -44,17 +59,37 @@
 <script>
 
   function showVal(id, newVal){
+    const prec = document.getElementById("tickmarks").children[(newVal / 12) - 1].getAttribute("label");
+    let i;
+    let rangeId;
+    const values = ["0", "25", "50", "75", "100"];
+    var elemIndex = 0;
+    const value = values.indexOf(prec);
     if (id === "monthRangeRent") {
-      document.getElementsByClassName("monthVal")[0].innerHTML=newVal;
+      i = 0;
+      rangeId = "rangeDotsRent"
     }
     else {
-      document.getElementsByClassName("monthVal")[1].innerHTML=newVal;
+      i = 1;
+      rangeId = "rangeDotsBuy"
     }
+    document.getElementsByClassName("monthVal")[i].firstElementChild.innerHTML=newVal+ " kuud";
+    document.getElementById(rangeId).style.background = "linear-gradient(to right, #04AA6D " + String(prec) + "%, #e3e3e3 "+ String(prec) +"%)";
+    while (elemIndex <= 4) {
+      if (elemIndex <= value) {
+      document.getElementById(rangeId).children[elemIndex].style.background = "#04AA6D";
+      }
+      else {
+        document.getElementById(rangeId).children[elemIndex].style.background = "white";
+      }
+      elemIndex++
+    }
+
   }
 
   function openTab(evt, name) {
     var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
+    tabcontent = document.getElementsByClassName("tabContent");
     for (i = 0; i < tabcontent.length; i++) {
       tabcontent[i].style.display = "none";
     }
@@ -65,6 +100,22 @@
     document.getElementById(name).style.display = "block";
     evt.currentTarget.className += " active";
   }
+
+  function dots(value) {
+    const dotsDiv = document.getElementById(value);
+    let i = 0;
+    while (i < 5) {
+      const dot = document.createElement('span');
+      dot.className += "dot";
+      dotsDiv.appendChild(dot);
+      i++
+    }
+  }
+
+  var ids = ["rangeDotsRent" ,"rangeDotsBuy"];
+  window.onload = ids.forEach(dots);
+  window.onload = showVal("monthRangeRent", 36);
+  window.onload = showVal("monthRangeBuy", 36);
 </script>
 <style>
   body {
@@ -126,7 +177,7 @@
   }
 
   /* Style the tab content */
-  .tabcontent {
+  .tabContent {
     position: relative;
     height: 100%;
     display: none;
@@ -135,40 +186,101 @@
     padding: 10px 10px 10px;
   }
 
+  .vars {
+    width: 100%;
+    position: relative;
+    height: calc(100% - 40px);
+  }
+
+  #monthSliderRent {
+    position: relative;
+    height: 50%;
+  }
+
+  .range {
+    position: relative;
+    -webkit-appearance: none;
+    width: 100%;
+    top: 18px;
+    background: transparent;
+    outline: none;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    z-index: 2;
+    margin: 0;
+  }
+
+  .rangeDots {
+    display: flex;
+    justify-content: space-between;
+    width: calc(100% - 12px);
+    background-color: #e3e3e3;
+    height: 4px;
+    position: relative;
+    z-index: 1;
+    padding: 0 6px;
+  }
+
+  #rangeDotsRent {
+    background: linear-gradient(to right, #04AA6D 50%, #e3e3e3 50%);
+  }
+
+  .dot {
+    position: relative;
+    top: -4px;
+    background-color: white;
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #04AA6D;
+    top: 20px;
+  }
+
+  .range::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    background: #04AA6D;
+    cursor: pointer;
+  }
+
+  .monthVal {
+    position: relative;
+    height: 50%;
+  }
+
+  .monthVal>p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #04AA6D;
+    text-shadow: 3px 3px #273345;
+  }
+
+  #monthValRent {
+    text-align: center;
+    vertical-align: middle;
+    margin: 0;
+    margin: 0;
+    line-height: 40px;
+  }
+
   .result {
     width: 100%;
     margin: 0 -10px;
     background-color: green;
     position: absolute;
     bottom: 0;
+    height: 50px;
   }
 
-  .range {
-    -webkit-appearance: none;
-    width: 75%;
-    height: 25px;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-  }
-
-  .range::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    background: #04AA6D;
-    cursor: pointer;
-  }
-
-  .range::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    background: #04AA6D;
-    cursor: pointer;
-  }
 </style>
 </body>
 </html>
