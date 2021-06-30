@@ -30,8 +30,7 @@
         <div class="slider" id="sliderRent">
           <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeRent"
                  oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
-          <div id="rangeDotsRent" class="rangeDots">
-          </div>
+          <div id="rangeDotsRent" class="rangeDots"></div>
         </div>
       </div>
       <div class="monthVal">
@@ -44,18 +43,22 @@
     </div>
   </div>
 
-
   <div id="buy" class="tabContent">
     <div class="vars">
-      <input type="number" min="100">
-      <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeBuy"
-             oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
-      <div id="rangeDotsBuy" class="rangeDots"></div>
-      <div class="monthVal">
+      <div class="amountInput" id="amountInputBuy">
+        <p id="inputTitleBuy">Sissemakse:</p>
+        <input type="number" min="100">
+      </div>
+      <div id="monthInputBuy">
+        <p id="sliderTitleBuy">36</p>
+        <div class="monthSlider" id="monthSliderBuy">
+          <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeBuy"
+                 oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
+          <div id="rangeDotsBuy" class="rangeDots"></div>
+        </div>
         <p id="monthValBuy">36</p>
       </div>
     </div>
-    <span class="monthVal">36</span>
     <div id="buyAmount" class="result">
       <p>36</p>
     </div>
@@ -247,11 +250,11 @@
     position: relative;
     z-index: 1;
     padding: 0 6px;
-    top: -16px
   }
 
   #rangeDotsRent {
     background: linear-gradient(to right, #04AA6D 50%, #e3e3e3 50%);
+    top: -16px;
   }
 
   .dot {
@@ -299,6 +302,39 @@
     vertical-align: middle;
     margin: 0;
 
+  }
+
+  .amountInput {
+    position: relative;
+    height: calc(50% - 10px);
+    display: flex;
+    justify-content: space-evenly;
+    padding: 5px;
+  }
+
+  #inputTitleBuy {
+    font-size: 20px;
+    color: #e3e3e3;
+    margin: 0;
+    text-align: center;
+    font-weight: bold;
+    vertical-align: middle;
+  }
+
+  #monthInputBuy {
+    position: relative;
+    height: 50%;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  #monthSliderBuy {
+    position: relative;
+    height: 100%;
+  }
+
+  #rangeDotsBuy {
+    position: relative;
   }
 
   div.result {
