@@ -24,16 +24,23 @@
   <div id="rent" class="tabContent" style="display: block">
     <div class="vars">
       <div class="monthSlider" id="monthSliderRent">
-        <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeRent"
-               oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
-        <div id="rangeDotsRent" class="rangeDots"></div>
+        <div class="sliderTitle">
+          <p id="sliderTitleRent">Rendiperiood</p>
+        </div>
+        <div class="slider" id="sliderRent">
+          <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeRent"
+                 oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
+          <div id="rangeDotsRent" class="rangeDots">
+          </div>
+        </div>
       </div>
       <div class="monthVal">
         <p  id="monthValRent">36</p>
       </div>
     </div>
-    <div id="rentAmount" style="background-color: #F8CC0F" class="result">
-      <p>36</p>
+    <div id="rentAmount" class="result">
+      <p class="result">Kuumakse: &nbsp; </p>
+      <p class="result" style="font-weight: bold">35€</p>
     </div>
   </div>
 
@@ -120,6 +127,7 @@
 <style>
   body {
     background-color: #324158;
+    margin: 0;
   }
 
   #calc {
@@ -180,28 +188,48 @@
   .tabContent {
     position: relative;
     height: 100%;
+    max-height: 116px;
     display: none;
     border: 2px solid white;
     border-top: none;
-    padding: 10px 10px 10px;
   }
 
   .vars {
     width: 100%;
     position: relative;
-    height: calc(100% - 40px);
+    height: calc(100% - 35px);
+  }
+
+  .sliderTitle {
+    position: relative;
+    height: 50%;
+  }
+
+  #sliderTitleRent {
+    font-size: 20px;
+    color: #e3e3e3;
+    margin: 0;
+    text-align: center;
+    padding-top: 10px;
+    font-weight: bold;
+  }
+
+  #sliderRent {
+    position: relative;
+    height: 50%;
+    padding: 5px 10px 0;
   }
 
   #monthSliderRent {
     position: relative;
-    height: 50%;
+    height: 70%;
   }
 
   .range {
     position: relative;
     -webkit-appearance: none;
     width: 100%;
-    top: 18px;
+    top: 2px;
     background: transparent;
     outline: none;
     -webkit-transition: .2s;
@@ -219,6 +247,7 @@
     position: relative;
     z-index: 1;
     padding: 0 6px;
+    top: -16px
   }
 
   #rangeDotsRent {
@@ -227,58 +256,70 @@
 
   .dot {
     position: relative;
-    top: -4px;
+    top: -2.5px;
     background-color: white;
     display: block;
-    width: 12px;
-    height: 12px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
   }
 
   .range::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background: #04AA6D;
     top: 20px;
   }
 
   .range::-moz-range-thumb {
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
     background: #04AA6D;
     cursor: pointer;
   }
 
   .monthVal {
     position: relative;
-    height: 50%;
+    height: 30%;
   }
 
   .monthVal>p {
+    position: relative;
     font-size: 18px;
     font-weight: bold;
     color: #04AA6D;
-    text-shadow: 3px 3px #273345;
+
   }
 
   #monthValRent {
     text-align: center;
     vertical-align: middle;
     margin: 0;
-    margin: 0;
-    line-height: 40px;
+
   }
 
-  .result {
-    width: 100%;
-    margin: 0 -10px;
-    background-color: green;
-    position: absolute;
+  div.result {
+    width: calc(100% - 20px);
+    border-top: white 2px solid;
+    position: relative;
     bottom: 0;
-    height: 50px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    padding: 0 10px;
+  }
+
+  p.result {
+    position: relative;
+    line-height: 35px;
+    vertical-align: middle;
+    font-size: 20px;
+    color: white;
+    margin: 0;
+    text-shadow: 2px 2px #273345;
   }
 
 </style>
