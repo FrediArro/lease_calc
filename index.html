@@ -24,8 +24,8 @@
   <div id="rent" class="tabContent" style="display: block">
     <div class="vars">
       <div class="monthSlider" id="monthSliderRent">
-        <div class="sliderTitle">
-          <p id="sliderTitleRent">Rendiperiood</p>
+        <div class="sliderTitle" id="sliderTitleRent">
+          <p>Rendiperiood</p>
         </div>
         <div class="slider" id="sliderRent">
           <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeRent"
@@ -33,8 +33,8 @@
           <div id="rangeDotsRent" class="rangeDots"></div>
         </div>
       </div>
-      <div class="monthVal">
-        <p  id="monthValRent">36</p>
+      <div class="monthVal" id="monthValRent">
+        <p>36</p>
       </div>
     </div>
     <div id="rentAmount" class="result">
@@ -49,21 +49,24 @@
         <p id="inputTitleBuy">Sissemakse:</p>
         <input type="number" min="100">
       </div>
-      <div id="monthInputBuy">
-        <p id="sliderTitleBuy">36</p>
+      <div id="sliderBuy">
+        <div class="sliderTitle" id="sliderTitleBuy">
+          <p>Rendiperiood</p>
+        </div>
         <div class="monthSlider" id="monthSliderBuy">
           <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeBuy"
                  oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
           <div id="rangeDotsBuy" class="rangeDots"></div>
         </div>
-        <p id="monthValBuy">36</p>
+          <div class="monthVal" id="monthValBuy">
+            <p>36</p>
+          </div>
+      </div>
+      <div id="buyAmount" class="result">
+      <p>36</p>
       </div>
     </div>
-    <div id="buyAmount" class="result">
-      <p>36</p>
-    </div>
   </div>
-
 </div>
 
 <script>
@@ -205,27 +208,31 @@
 
   .sliderTitle {
     position: relative;
-    height: 50%;
   }
 
   #sliderTitleRent {
-    font-size: 20px;
+    height: 50%;
+  }
+
+  #sliderTitleBuy {
+    height: 100%;
+  }
+
+  .sliderTitle>p {
     color: #e3e3e3;
     margin: 0;
     text-align: center;
-    padding-top: 10px;
     font-weight: bold;
   }
 
-  #sliderRent {
-    position: relative;
-    height: 50%;
-    padding: 5px 10px 0;
+  #sliderTitleRent>p {
+    font-size: 20px;
+    padding-top: 10px;
+
   }
 
-  #monthSliderRent {
-    position: relative;
-    height: 70%;
+  #sliderTitleBuy>p {
+    margin: 0;
   }
 
   .range {
@@ -244,17 +251,53 @@
   .rangeDots {
     display: flex;
     justify-content: space-between;
-    width: calc(100% - 12px);
-    background-color: #e3e3e3;
+    background: linear-gradient(to right, #04AA6D 50%, #e3e3e3 50%);
     height: 4px;
     position: relative;
     z-index: 1;
-    padding: 0 6px;
   }
 
   #rangeDotsRent {
     background: linear-gradient(to right, #04AA6D 50%, #e3e3e3 50%);
     top: -16px;
+    width: calc(100% - 12px);
+    padding: 0 6px;
+  }
+
+  #rangeDotsBuy {
+    position: relative;
+    width: calc(100% - 18px);
+    padding: 0 9px;
+  }
+
+  #monthSliderRent {
+    position: relative;
+    height: 70%;
+  }
+
+  #monthSliderBuy {
+    position: relative;
+    height: 100%;
+  }
+
+  #sliderRent {
+    position: relative;
+    height: 50%;
+    padding: 5px 10px 0;
+  }
+
+  #sliderB
+
+  #monthRangeBuy {
+    position: relative;
+    width: calc(100% - 9px);
+    padding: 0 4.5px;
+    top: 16px;
+  }
+
+  #monthValBuy {
+    position: relative;
+    width: 20%;
   }
 
   .dot {
@@ -284,22 +327,29 @@
     cursor: pointer;
   }
 
+
+
+
+
   .monthVal {
     position: relative;
-    height: 30%;
+    font-weight: bold;
+    color: #04AA6D;
+    display: flex;
+    justify-content: space-evenly;
   }
 
-  .monthVal>p {
+  #monthVal>p {
     position: relative;
     font-size: 18px;
     font-weight: bold;
     color: #04AA6D;
-
   }
 
-  #monthValRent {
+  #monthValRent>p {
     text-align: center;
     vertical-align: middle;
+    height: 30%;
     margin: 0;
 
   }
@@ -321,21 +371,14 @@
     vertical-align: middle;
   }
 
-  #monthInputBuy {
+  #sliderBuy {
     position: relative;
     height: 50%;
     display: flex;
     justify-content: space-evenly;
   }
 
-  #monthSliderBuy {
-    position: relative;
-    height: 100%;
-  }
 
-  #rangeDotsBuy {
-    position: relative;
-  }
 
   div.result {
     width: calc(100% - 20px);
