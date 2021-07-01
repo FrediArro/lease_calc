@@ -46,12 +46,16 @@
   <div id="buy" class="tabContent">
     <div class="vars">
       <div class="amountInput" id="amountInputBuy">
-        <p id="inputTitleBuy">Sissemakse:</p>
-        <input type="number" min="100">
+        <div class="inputTitle" id="inputTitleBuy">
+          <p>Sissemakse:</p>
+        </div>
+        <div class="moneyInput" id="moneyInputBuy">
+          <input type="number" min="100">
+        </div>
       </div>
       <div id="sliderBuy">
         <div class="sliderTitle" id="sliderTitleBuy">
-          <p>Rendiperiood</p>
+          <p>Rendiperiood:</p>
         </div>
         <div class="monthSlider" id="monthSliderBuy">
           <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeBuy"
@@ -62,9 +66,10 @@
             <p>36</p>
           </div>
       </div>
-      <div id="buyAmount" class="result">
-      <p>36</p>
-      </div>
+    </div>
+    <div id="buyAmount" class="result">
+      <p class="result">Kuumakse: &nbsp; </p>
+      <p class="result" style="font-weight: bold">35€</p>
     </div>
   </div>
 </div>
@@ -72,10 +77,10 @@
 <script>
 
   function showVal(id, newVal){
-    const prec = document.getElementById("tickmarks").children[(newVal / 12) - 1].getAttribute("label");
+    let prec = parseInt(document.getElementById("tickmarks").children[(newVal / 12) - 1].getAttribute("label"));
     let i;
     let rangeId;
-    const values = ["0", "25", "50", "75", "100"];
+    const values = [0, 25, 50, 75, 100];
     var elemIndex = 0;
     const value = values.indexOf(prec);
     if (id === "monthRangeRent") {
@@ -87,7 +92,9 @@
       rangeId = "rangeDotsBuy"
     }
     document.getElementsByClassName("monthVal")[i].firstElementChild.innerHTML=newVal+ " kuud";
-    document.getElementById(rangeId).style.background = "linear-gradient(to right, #04AA6D " + String(prec) + "%, #e3e3e3 "+ String(prec) +"%)";
+    var correction = corrector(prec, i, value);
+    console.log(correction);
+      document.getElementById(rangeId).style.background = "linear-gradient(to right, #04AA6D calc(" + String(prec) + "%" + correction + "), #e3e3e3 calc(" + String(prec) + "%" + correction + "))";
     while (elemIndex <= 4) {
       if (elemIndex <= value) {
       document.getElementById(rangeId).children[elemIndex].style.background = "#04AA6D";
@@ -98,6 +105,17 @@
       elemIndex++
     }
 
+  }
+
+  function corrector(precentage, id, value) {
+    let correctionRent = [" + 12", " + 6", " + 0", " - 6", " - 12"];
+    let correctonBuy = [" + 9", " + 4.5", " + 0", " - 4.5", " - 9"];
+    if (id === 0) {
+      return correctionRent[value] + "px"
+    }
+    else {
+      return correctonBuy[value] + "px"
+    }
   }
 
   function openTab(evt, name) {
@@ -216,6 +234,7 @@
 
   #sliderTitleBuy {
     height: 100%;
+    width: 35%;
   }
 
   .sliderTitle>p {
@@ -228,18 +247,17 @@
   #sliderTitleRent>p {
     font-size: 20px;
     padding-top: 10px;
-
   }
 
   #sliderTitleBuy>p {
     margin: 0;
+    font-size: 18px;
   }
 
   .range {
     position: relative;
     -webkit-appearance: none;
     width: 100%;
-    top: 2px;
     background: transparent;
     outline: none;
     -webkit-transition: .2s;
@@ -259,15 +277,16 @@
 
   #rangeDotsRent {
     background: linear-gradient(to right, #04AA6D 50%, #e3e3e3 50%);
-    top: -16px;
-    width: calc(100% - 12px);
-    padding: 0 6px;
+    top: -17px;
+    width: calc(100% - 24px);
+    padding: 0 12px;
   }
 
   #rangeDotsBuy {
-    position: relative;
-    width: calc(100% - 18px);
-    padding: 0 9px;
+    position: absolute;
+    top: 50%;
+    width: calc(100% - 30px);
+    padding: 0 10px;
   }
 
   #monthSliderRent {
@@ -278,6 +297,8 @@
   #monthSliderBuy {
     position: relative;
     height: 100%;
+    padding: 0 5px;
+    width: 45%;
   }
 
   #sliderRent {
@@ -286,18 +307,26 @@
     padding: 5px 10px 0;
   }
 
-  #sliderB
+  #monthRangeRent {
+    width: calc(100% - 17px);
+    padding: 0 8.5px;
+  }
 
   #monthRangeBuy {
     position: relative;
     width: calc(100% - 9px);
     padding: 0 4.5px;
-    top: 16px;
   }
 
   #monthValBuy {
     position: relative;
     width: 20%;
+  }
+
+  #monthValBuy>p {
+    text-align: center;
+    vertical-align: middle;
+    margin: 2px 0 0;
   }
 
   .dot {
@@ -356,14 +385,18 @@
 
   .amountInput {
     position: relative;
-    height: calc(50% - 10px);
+    height: calc(50% - 20px);
     display: flex;
     justify-content: space-evenly;
-    padding: 5px;
+    padding: 10px;
   }
 
   #inputTitleBuy {
-    font-size: 20px;
+    width: 35%;
+  }
+
+  #inputTitleBuy>p {
+    font-size: 18px;
     color: #e3e3e3;
     margin: 0;
     text-align: center;
@@ -371,10 +404,24 @@
     vertical-align: middle;
   }
 
+  #moneyInputBuy {
+    position: relative;
+    width: 65%;
+  }
+
+  #moneyInputBuy>input {
+    position: relative;
+    width: 100%;
+    height: 95%;
+    padding: 0;
+    border: 0;
+  }
+
   #sliderBuy {
     position: relative;
-    height: 50%;
+    height: calc(50% - 20px);
     display: flex;
+    padding: 10px;
     justify-content: space-evenly;
   }
 
