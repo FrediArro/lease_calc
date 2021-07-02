@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
-
 <head>
+  <script> var price = 40000</script>
   <meta name="description" content="Webpage description goes here" />
   <meta charset="utf-8">
   <title>Change_me</title>
@@ -39,7 +39,7 @@
     </div>
     <div id="rentAmount" class="result">
       <p class="result">Kuumakse: &nbsp; </p>
-      <p class="result" style="font-weight: bold">35€</p>
+      <p class="result" id="rentResult" style="font-weight: bold">35€</p>
     </div>
   </div>
 
@@ -69,55 +69,12 @@
     </div>
     <div id="buyAmount" class="result">
       <p class="result">Kuumakse: &nbsp; </p>
-      <p class="result" style="font-weight: bold">35€</p>
+      <p class="result" id="buyResult" style="font-weight: bold">35€</p>
     </div>
   </div>
 </div>
 
 <script>
-
-  function showVal(id, newVal){
-    let prec = parseInt(document.getElementById("tickmarks").children[(newVal / 12) - 1].getAttribute("label"));
-    let i;
-    let rangeId;
-    const values = [0, 25, 50, 75, 100];
-    var elemIndex = 0;
-    const value = values.indexOf(prec);
-    if (id === "monthRangeRent") {
-      i = 0;
-      rangeId = "rangeDotsRent"
-    }
-    else {
-      i = 1;
-      rangeId = "rangeDotsBuy"
-    }
-    document.getElementsByClassName("monthVal")[i].firstElementChild.innerHTML=newVal+ " kuud";
-    var correction = corrector(prec, i, value);
-    console.log(correction);
-      document.getElementById(rangeId).style.background = "linear-gradient(to right, #04AA6D calc(" + String(prec) + "%" + correction + "), #e3e3e3 calc(" + String(prec) + "%" + correction + "))";
-    while (elemIndex <= 4) {
-      if (elemIndex <= value) {
-      document.getElementById(rangeId).children[elemIndex].style.background = "#04AA6D";
-      }
-      else {
-        document.getElementById(rangeId).children[elemIndex].style.background = "white";
-      }
-      elemIndex++
-    }
-
-  }
-
-  function corrector(precentage, id, value) {
-    let correctionRent = [" + 12", " + 6", " + 0", " - 6", " - 12"];
-    let correctonBuy = [" + 9", " + 4.5", " + 0", " - 4.5", " - 9"];
-    if (id === 0) {
-      return correctionRent[value] + "px"
-    }
-    else {
-      return correctonBuy[value] + "px"
-    }
-  }
-
   function openTab(evt, name) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabContent");
@@ -140,6 +97,59 @@
       dot.className += "dot";
       dotsDiv.appendChild(dot);
       i++
+    }
+  }
+
+  function showVal(id, newVal){
+    let prec = parseInt(document.getElementById("tickmarks").children[(newVal / 12) - 1].getAttribute("label"));
+    let i;
+    let rangeId;
+    const values = [0, 25, 50, 75, 100];
+    var elemIndex = 0;
+    const value = values.indexOf(prec);
+    if (id === "monthRangeRent") {
+      i = 0;
+      rangeId = "rangeDotsRent";
+    }
+    else {
+      i = 1;
+      rangeId = "rangeDotsBuy"
+    }
+    showPrice(i, newVal, 0);
+    document.getElementsByClassName("monthVal")[i].firstElementChild.innerHTML=newVal+ " kuud";
+    var correction = corrector(prec, i, value);
+      document.getElementById(rangeId).style.background = "linear-gradient(to right, #04AA6D calc(" + String(prec) + "%" + correction + "), #e3e3e3 calc(" + String(prec) + "%" + correction + "))";
+    while (elemIndex <= 4) {
+      if (elemIndex <= value) {
+      document.getElementById(rangeId).children[elemIndex].style.background = "#04AA6D";
+      }
+      else {
+        document.getElementById(rangeId).children[elemIndex].style.background = "white";
+      }
+      elemIndex++
+    }
+  }
+
+  function corrector(precentage, id, value) {
+    let correctionRent = [" + 12", " + 6", " + 0", " - 6", " - 12"];
+    let correctonBuy = [" + 9", " + 4.5", " + 0", " - 4.5", " - 9"];
+    if (id === 0) {
+      return correctionRent[value] + "px"
+    }
+    else {
+      return correctonBuy[value] + "px"
+    }
+  }
+
+  function showPrice(id, months, money) {
+    let final;
+    if (id === 0) {
+      final = Math.round(price/months);
+      console.log(final);
+      document.getElementById("rentResult").innerText = String(final) + "€";
+    }
+    else {
+
     }
   }
 
@@ -284,7 +294,7 @@
 
   #rangeDotsBuy {
     position: absolute;
-    top: 50%;
+    top: 45%;
     width: calc(100% - 30px);
     padding: 0 10px;
   }
@@ -419,9 +429,9 @@
 
   #sliderBuy {
     position: relative;
-    height: calc(50% - 20px);
+    height: calc(50% - 15px);
     display: flex;
-    padding: 10px;
+    padding: 5px 10px 10px 5px;
     justify-content: space-evenly;
   }
 
