@@ -18,39 +18,22 @@
 </datalist>
 <div class="container" id="calc">
   <div class="tab">
-    <button class="tablinks active" onclick="openTab(event, 'rent')">Täisteenusrent</button>
-    <button class="tablinks" onclick="openTab(event, 'buy')">Rent-väljaost</button>
+    <button class="tablinks active" onclick="openTab(event, 'buy')">Rent-väljaost</button>
+    <button class="tablinks" onclick="openTab(event, 'rent')">Täisteenusrent</button>
   </div>
-  <div id="rent" class="tabContent" style="display: block">
-    <div class="vars">
-      <div class="monthSlider" id="monthSliderRent">
-        <div class="sliderTitle" id="sliderTitleRent">
-          <p>Rendiperiood</p>
-        </div>
-        <div class="slider" id="sliderRent">
-          <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeRent"
-                 oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
-          <div id="rangeDotsRent" class="rangeDots"></div>
-        </div>
-      </div>
-      <div class="monthVal" id="monthValRent">
-        <p>36</p>
-      </div>
-    </div>
-    <div id="rentAmount" class="result">
-      <p class="result">Kuumakse: &nbsp; </p>
-      <p class="result" id="rentResult" style="font-weight: bold">35€</p>
-    </div>
-  </div>
-
-  <div id="buy" class="tabContent">
+  <div id="buy" class="tabContent" style="display: block">
     <div class="vars">
       <div class="amountInput" id="amountInputBuy">
         <div class="inputTitle" id="inputTitleBuy">
-          <p>Sissemakse:</p>
+          <p>Esmane makse:</p>
         </div>
-        <div class="moneyInput" id="moneyInputBuy">
-          <input type="number" min="100">
+        <div class="monthSlider" id="moneySliderBuy">
+          <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="moneyRangeBuy"
+                 oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
+          <div id="rangeMoneyDotsBuy" class="rangeDots"></div>
+        </div>
+        <div class="monthVal" id="moneyValBuy">
+          <p>36</p>
         </div>
       </div>
       <div id="sliderBuy">
@@ -60,21 +43,51 @@
         <div class="monthSlider" id="monthSliderBuy">
           <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeBuy"
                  oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
-          <div id="rangeDotsBuy" class="rangeDots"></div>
+          <div id="rangeMonthDotsBuy" class="rangeDots"></div>
         </div>
-          <div class="monthVal" id="monthValBuy">
-            <p>36</p>
-          </div>
+        <div class="monthVal" id="monthValBuy">
+          <p>36</p>
+        </div>
       </div>
     </div>
     <div id="buyAmount" class="result">
-      <p class="result">Kuumakse: &nbsp; </p>
+      <p class="result">Rendimakse: &nbsp; </p>
       <p class="result" id="buyResult" style="font-weight: bold">35€</p>
     </div>
   </div>
+
+  <div id="rent" class="tabContent">
+    <div class="vars">
+      <div class="monthSlider" id="monthSliderRent">
+        <div class="sliderTitle" id="sliderTitleRent">
+          <p>Rendiperiood</p>
+        </div>
+        <div class="slider" id="sliderRent">
+          <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeRent"
+                 oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
+          <div id="rangeMonthDotsRent" class="rangeDots"></div>
+        </div>
+      </div>
+      <div class="monthVal" id="monthValRent">
+        <p>36</p>
+      </div>
+    </div>
+    <div id="rentAmount" class="result">
+      <p class="result">Rendimakse: &nbsp; </p>
+      <p class="result" id="rentResult" style="font-weight: bold">35€</p>
+    </div>
+  </div>
+
 </div>
 
 <script>
+  //initiate as false
+  var isMobile = false;
+  // device detection
+  if (/Mobi/.test(navigator.userAgent)) {
+    isMobile = true;
+  }
+
   function openTab(evt, name) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabContent");
@@ -109,19 +122,23 @@
     const value = values.indexOf(prec);
     if (id === "monthRangeRent") {
       i = 0;
-      rangeId = "rangeDotsRent";
+      rangeId = "rangeMonthDotsRent";
     }
-    else {
+    if (id === "monthRangeBuy") {
       i = 1;
-      rangeId = "rangeDotsBuy"
+      rangeId = "rangeMonthDotsBuy"
+    }
+    if (id === "moneyRangeBuy") {
+      i = 2;
+      rangeId = "rangeMoneyDotsBuy"
     }
     showPrice(i, newVal, 0);
     document.getElementsByClassName("monthVal")[i].firstElementChild.innerHTML=newVal+ " kuud";
     var correction = corrector(prec, i, value);
-      document.getElementById(rangeId).style.background = "linear-gradient(to right, #04AA6D calc(" + String(prec) + "%" + correction + "), #e3e3e3 calc(" + String(prec) + "%" + correction + "))";
+      document.getElementById(rangeId).style.background = "linear-gradient(to right, #FDCC0D calc(" + String(prec) + "%" + correction + "), #e3e3e3 calc(" + String(prec) + "%" + correction + "))";
     while (elemIndex <= 4) {
       if (elemIndex <= value) {
-      document.getElementById(rangeId).children[elemIndex].style.background = "#04AA6D";
+      document.getElementById(rangeId).children[elemIndex].style.background = "#FDCC0D";
       }
       else {
         document.getElementById(rangeId).children[elemIndex].style.background = "white";
@@ -153,10 +170,11 @@
     }
   }
 
-  var ids = ["rangeDotsRent" ,"rangeDotsBuy"];
+  var ids = ["rangeMonthDotsRent" ,"rangeMonthDotsBuy", "rangeMoneyDotsBuy"];
   window.onload = ids.forEach(dots);
   window.onload = showVal("monthRangeRent", 36);
   window.onload = showVal("monthRangeBuy", 36);
+  window.onload = showVal("moneyRangeBuy", 36);
 </script>
 <style>
   body {
@@ -200,7 +218,7 @@
     cursor: pointer;
     height: 100%;
     width: 50%;
-    transition: 0.3s;
+    transition: 0.1s;
     font-size: 20px;
     background-color: #324158;
     color: #e3e3e3;
@@ -215,7 +233,7 @@
 
   /* Create an active/current tablink class */
   .tab button.active {
-    border-bottom: 5px solid #F8CC0F;
+    border-bottom: 5px solid #FDCC0D;
   }
 
   /* Style the tab content */
@@ -224,7 +242,6 @@
     height: 100%;
     max-height: 116px;
     display: none;
-    border: 2px solid white;
     border-top: none;
   }
 
@@ -279,20 +296,27 @@
   .rangeDots {
     display: flex;
     justify-content: space-between;
-    background: linear-gradient(to right, #04AA6D 50%, #e3e3e3 50%);
+    background: linear-gradient(to right, #FDCC0D 50%, #e3e3e3 50%);
     height: 4px;
     position: relative;
     z-index: 1;
   }
 
-  #rangeDotsRent {
-    background: linear-gradient(to right, #04AA6D 50%, #e3e3e3 50%);
+  #rangeMonthDotsRent {
+    background: linear-gradient(to right, #FDCC0D 50%, #e3e3e3 50%);
     top: -17px;
     width: calc(100% - 24px);
     padding: 0 12px;
   }
 
-  #rangeDotsBuy {
+  #rangeMonthDotsBuy {
+    position: absolute;
+    top: 45%;
+    width: calc(100% - 30px);
+    padding: 0 10px;
+  }
+
+  #rangeMoneyDotsBuy {
     position: absolute;
     top: 45%;
     width: calc(100% - 30px);
@@ -305,6 +329,13 @@
   }
 
   #monthSliderBuy {
+    position: relative;
+    height: 100%;
+    padding: 0 5px;
+    width: 45%;
+  }
+
+  #moneySliderBuy {
     position: relative;
     height: 100%;
     padding: 0 5px;
@@ -355,14 +386,14 @@
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: #04AA6D;
+    background: #FDCC0D;
     top: 20px;
   }
 
   .range::-moz-range-thumb {
     width: 18px;
     height: 18px;
-    background: #04AA6D;
+    background: #FDCC0D;
     cursor: pointer;
   }
 
@@ -373,7 +404,7 @@
   .monthVal {
     position: relative;
     font-weight: bold;
-    color: #04AA6D;
+    color: #FDCC0D;
     display: flex;
     justify-content: space-evenly;
   }
@@ -382,7 +413,7 @@
     position: relative;
     font-size: 18px;
     font-weight: bold;
-    color: #04AA6D;
+    color: #FDCC0D;
   }
 
   #monthValRent>p {
