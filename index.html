@@ -24,7 +24,7 @@
   <div id="buy" class="tabContent" style="display: block">
     <div class="vars">
       <div class="amountInput" id="amountInputBuy">
-        <div class="inputTitle" id="inputTitleBuy">
+        <div class="sliderTitle" id="moneySliderTitleBuy">
           <p>Esmane makse:</p>
         </div>
         <div class="monthSlider" id="moneySliderBuy">
@@ -37,7 +37,7 @@
         </div>
       </div>
       <div id="sliderBuy">
-        <div class="sliderTitle" id="sliderTitleBuy">
+        <div class="sliderTitle" id="monthSliderTitleBuy">
           <p>Rendiperiood:</p>
         </div>
         <div class="monthSlider" id="monthSliderBuy">
@@ -259,26 +259,27 @@
     height: 50%;
   }
 
-  #sliderTitleBuy {
+  #monthSliderTitleBuy {
     height: 100%;
-    width: 35%;
+    width: 40%;
   }
 
   .sliderTitle>p {
     color: #e3e3e3;
     margin: 0;
-    text-align: center;
     font-weight: bold;
   }
 
   #sliderTitleRent>p {
     font-size: 20px;
     padding-top: 10px;
+    text-align: center;
   }
 
-  #sliderTitleBuy>p {
+  #monthSliderTitleBuy>p {
     margin: 0;
     font-size: 18px;
+    text-align: right;
   }
 
   .range {
@@ -332,14 +333,14 @@
     position: relative;
     height: 100%;
     padding: 0 5px;
-    width: 45%;
+    width: 40%;
   }
 
   #moneySliderBuy {
     position: relative;
     height: 100%;
     padding: 0 5px;
-    width: 45%;
+    width: 40%;
   }
 
   #sliderRent {
@@ -359,9 +360,20 @@
     padding: 0 4.5px;
   }
 
+  #moneyValBuy {
+    position: relative;
+    width: 20%;
+  }
+
   #monthValBuy {
     position: relative;
     width: 20%;
+  }
+
+  #moneyValBuy>p {
+    text-align: center;
+    vertical-align: middle;
+    margin: 2px 0 0;
   }
 
   #monthValBuy>p {
@@ -432,17 +444,14 @@
     padding: 10px;
   }
 
-  #inputTitleBuy {
-    width: 35%;
+  #moneySliderTitleBuy {
+    width: 40%;
   }
 
-  #inputTitleBuy>p {
+  #moneySliderTitleBuy>p {
     font-size: 18px;
     color: #e3e3e3;
-    margin: 0;
-    text-align: center;
-    font-weight: bold;
-    vertical-align: middle;
+    text-align: right;
   }
 
   #moneyInputBuy {
