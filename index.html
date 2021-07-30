@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-  <script> var price = 40000</script>
+  <script>
+    var price = 40000;
+  </script>
   <meta name="description" content="Webpage description goes here" />
   <meta charset="utf-8">
   <title>Change_me</title>
@@ -36,7 +38,7 @@
           <p>36</p>
         </div>
       </div>
-      <div id="sliderBuy">
+      <div class="amountInput" id="sliderBuy">
         <div class="sliderTitle" id="monthSliderTitleBuy">
           <p>Rendiperiood:</p>
         </div>
@@ -58,10 +60,10 @@
 
   <div id="rent" class="tabContent">
     <div class="vars">
+      <div class="sliderTitle" id="sliderTitleRent">
+        <p>Rendiperiood</p>
+      </div>
       <div class="monthSlider" id="monthSliderRent">
-        <div class="sliderTitle" id="sliderTitleRent">
-          <p>Rendiperiood</p>
-        </div>
         <div class="slider" id="sliderRent">
           <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeRent"
                  oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
@@ -81,11 +83,20 @@
 </div>
 
 <script>
-  //initiate as false
-  var isMobile = false;
   // device detection
-  if (/Mobi/.test(navigator.userAgent)) {
-    isMobile = true;
+  function mobilize() {
+    console.log((document.getElementById("buy").parentElement.clientHeight));
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+      console.log("Mobile device");
+      var buttons = document.getElementsByClassName("tablinks");
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].style.fontSize = '14px';
+      }
+      document.getElementById("amountInputBuy").classList.add("variableMobile");
+      document.getElementById("amountInputBuy").classList.remove("amountInput");
+      document.getElementById("sliderBuy").classList.add("variableMobile");
+      document.getElementById("sliderBuy").classList.remove("amountInput");
+    }
   }
 
   function openTab(evt, name) {
@@ -121,7 +132,7 @@
     var elemIndex = 0;
     const value = values.indexOf(prec);
     if (id === "monthRangeRent") {
-      i = 0;
+      i = 2;
       rangeId = "rangeMonthDotsRent";
     }
     if (id === "monthRangeBuy") {
@@ -129,7 +140,7 @@
       rangeId = "rangeMonthDotsBuy"
     }
     if (id === "moneyRangeBuy") {
-      i = 2;
+      i = 0;
       rangeId = "rangeMoneyDotsBuy"
     }
     showPrice(i, newVal, 0);
@@ -160,13 +171,15 @@
 
   function showPrice(id, months, money) {
     let final;
-    if (id === 0) {
+    if (id === 2) {
       final = Math.round(price/months);
       console.log(final);
       document.getElementById("rentResult").innerText = String(final) + "€";
     }
     else {
-
+      final = Math.round(price/months);
+      console.log(final);
+      document.getElementById("buyResult").innerText = String(final) + "€";
     }
   }
 
@@ -175,6 +188,7 @@
   window.onload = showVal("monthRangeRent", 36);
   window.onload = showVal("monthRangeBuy", 36);
   window.onload = showVal("moneyRangeBuy", 36);
+  window.onload = mobilize();
 </script>
 <style>
   body {
@@ -183,8 +197,8 @@
   }
 
   #calc {
-    width: 395px;
-    height: 148px;
+    width: 100%;
+    height: 100%;
     background-color: #324158;
     font-family: Avenir,sans-serif;
 
@@ -240,7 +254,7 @@
   .tabContent {
     position: relative;
     height: 100%;
-    max-height: 116px;
+    max-height: calc(100% - 32px);
     display: none;
     border-top: none;
   }
@@ -324,23 +338,16 @@
     padding: 0 10px;
   }
 
+  .monthSliderBuy {
+    position: relative;
+    height: 100%;
+    padding: 0 5px;
+    width: 40%;
+  }
+  
   #monthSliderRent {
     position: relative;
     height: 70%;
-  }
-
-  #monthSliderBuy {
-    position: relative;
-    height: 100%;
-    padding: 0 5px;
-    width: 40%;
-  }
-
-  #moneySliderBuy {
-    position: relative;
-    height: 100%;
-    padding: 0 5px;
-    width: 40%;
   }
 
   #sliderRent {
@@ -436,6 +443,17 @@
 
   }
 
+  .variableMobile {
+    position: relative;
+    height: 50%;
+    display: block;
+  }
+
+  .variableMobile>div {
+    height: 33%;
+    width: 100%
+  }
+
   .amountInput {
     position: relative;
     height: calc(50% - 20px);
@@ -466,14 +484,7 @@
     padding: 0;
     border: 0;
   }
-
-  #sliderBuy {
-    position: relative;
-    height: calc(50% - 15px);
-    display: flex;
-    padding: 5px 10px 10px 5px;
-    justify-content: space-evenly;
-  }
+  
 
 
 
