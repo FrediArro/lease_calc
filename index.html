@@ -3,6 +3,7 @@
 <head>
   <script>
     var price = 40000;
+    var ins = 100;
   </script>
   <meta name="description" content="Webpage description goes here" />
   <meta charset="utf-8">
@@ -30,24 +31,28 @@
           <p>Esmane makse:</p>
         </div>
         <div class="monthSlider" id="moneySliderBuy">
-          <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="moneyRangeBuy"
-                 oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
-          <div id="rangeMoneyDotsBuy" class="rangeDots"></div>
+          <div class="slider">
+            <input type="range" class="range" id="moneyRangeBuy"
+                   oninput="showMoneyVal(this.id, this.value)" onchange="showMoneyVal(this.id, this.value)">
+            <div id="rangeMoneyDotsBuy" class="rangeDots"></div>
+          </div>
         </div>
-        <div class="monthVal" id="moneyValBuy">
+        <div class="inputVal" id="moneyValBuy">
           <p>36</p>
         </div>
       </div>
-      <div class="amountInput" id="sliderBuy">
+      <div class="amountInput" id="monthInputBuy">
         <div class="sliderTitle" id="monthSliderTitleBuy">
           <p>Rendiperiood:</p>
         </div>
         <div class="monthSlider" id="monthSliderBuy">
+          <div class="slider">
           <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeBuy"
                  oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
           <div id="rangeMonthDotsBuy" class="rangeDots"></div>
+          </div>
         </div>
-        <div class="monthVal" id="monthValBuy">
+        <div class="inputVal" id="monthValBuy">
           <p>36</p>
         </div>
       </div>
@@ -60,19 +65,21 @@
 
   <div id="rent" class="tabContent">
     <div class="vars">
-      <div class="sliderTitle" id="sliderTitleRent">
-        <p>Rendiperiood</p>
-      </div>
-      <div class="monthSlider" id="monthSliderRent">
-        <div class="slider" id="sliderRent">
-          <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeRent"
-                 oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
-          <div id="rangeMonthDotsRent" class="rangeDots"></div>
+      <div class="amountInput" id="monthInputRent">
+        <div class="sliderTitle" id="sliderTitleRent">
+          <p>Rendiperiood</p>
         </div>
-      </div>
-      <div class="monthVal" id="monthValRent">
-        <p>36</p>
-      </div>
+        <div class="monthSlider" id="monthSliderRent">
+          <div class="slider" id="sliderRent">
+            <input type="range" list="tickmarks" step="12" min="12" max="60" class="range" id="monthRangeRent"
+                   oninput="showVal(this.id, this.value)" onchange="showVal(this.id, this.value)">
+            <div id="rangeMonthDotsRent" class="rangeDots"></div>
+          </div>
+        </div>
+        <div class="inputVal" id="monthValRent">
+          <p>36</p>
+        </div>
+    </div>
     </div>
     <div id="rentAmount" class="result">
       <p class="result">Rendimakse: &nbsp; </p>
@@ -86,20 +93,36 @@
   // device detection
   function mobilize() {
     console.log((document.getElementById("buy").parentElement.clientHeight));
-    if (/Mobi|Android/i.test(navigator.userAgent)) {
+    console.log(screen.orientation);
+    if (screen.orientation.type === "portrait-primary" | screen.orientation.angle === 90) {
       console.log("Mobile device");
       var buttons = document.getElementsByClassName("tablinks");
       for (var i = 0; i < buttons.length; i++) {
         buttons[i].style.fontSize = '14px';
       }
+
       document.getElementById("amountInputBuy").classList.add("variableMobile");
       document.getElementById("amountInputBuy").classList.remove("amountInput");
-      document.getElementById("sliderBuy").classList.add("variableMobile");
-      document.getElementById("sliderBuy").classList.remove("amountInput");
+      document.getElementById("monthInputBuy").classList.add("variableMobile");
+      document.getElementById("monthInputBuy").classList.remove("amountInput");
+      document.getElementById("monthInputRent").classList.add("variableMobile");
+      document.getElementById("monthInputRent").classList.remove("amountInput");
+      document.getElementById("monthInputRent").classList.remove("amountInput");
+      document.getElementById("moneySliderTitleBuy").firstElementChild.style.textAlign = "left";
+      document.getElementById("monthSliderTitleBuy").firstElementChild.style.textAlign = "left";
     }
   }
 
   function openTab(evt, name) {
+    if (name === "rent") {
+      var id = 2;
+      var month = document.getElementById("monthRangeRent").value;
+    }
+    else {
+      var id = 1;
+      var month = document.getElementById("monthRangeBuy").value;
+    }
+    showPrice(id, month, 0);
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabContent");
     for (i = 0; i < tabcontent.length; i++) {
@@ -124,6 +147,13 @@
     }
   }
 
+  function moneyValues() {
+    console.log(price*0.1);
+    document.getElementById("moneyRangeBuy").min = price*0.1;
+    document.getElementById("moneyRangeBuy").max = price*0.5;
+    document.getElementById("moneyRangeBuy").step = 250;
+  }
+
   function showVal(id, newVal){
     let prec = parseInt(document.getElementById("tickmarks").children[(newVal / 12) - 1].getAttribute("label"));
     let i;
@@ -144,28 +174,59 @@
       rangeId = "rangeMoneyDotsBuy"
     }
     showPrice(i, newVal, 0);
-    document.getElementsByClassName("monthVal")[i].firstElementChild.innerHTML=newVal+ " kuud";
-    var correction = corrector(prec, i, value);
-      document.getElementById(rangeId).style.background = "linear-gradient(to right, #FDCC0D calc(" + String(prec) + "%" + correction + "), #e3e3e3 calc(" + String(prec) + "%" + correction + "))";
-    while (elemIndex <= 4) {
-      if (elemIndex <= value) {
-      document.getElementById(rangeId).children[elemIndex].style.background = "#FDCC0D";
+    document.getElementsByClassName("inputVal")[i].firstElementChild.innerHTML = newVal+ " kuud";
+    var correction = corrector(i, value);
+    document.getElementById(rangeId).style.background = "linear-gradient(to right, #FDCC0D calc(" + String(prec) + "%" + correction + "), #e3e3e3 calc(" + String(prec) + "%" + correction + "))";
+    // dots coloring by the value
+    if (i > 0) {
+      while (elemIndex <= 4) {
+        if (elemIndex <= value) {
+        document.getElementById(rangeId).children[elemIndex].style.background = "#FDCC0D";
+        }
+        else {
+          document.getElementById(rangeId).children[elemIndex].style.background = "white";
+        }
+        elemIndex++
       }
-      else {
-        document.getElementById(rangeId).children[elemIndex].style.background = "white";
-      }
-      elemIndex++
     }
   }
 
-  function corrector(precentage, id, value) {
+  function showMoneyVal(id, newVal) {
+    let prec = Math.round((newVal-(price*0.1))/((price*0.4))*100);
+    let correction = corrector(1, closest(prec));
+    document.getElementById("moneyValBuy").firstElementChild.innerText = newVal + " €";
+    //console.log("linear-gradient(to right, #FDCC0D calc(" + String(prec) + "%" + correction + "), #e3e3e3 calc(" + String(prec) + "%" + correction + "))");
+    //document.getElementById("rangeMoneyDotsBuy").style.background = "linear-gradient(to right, #FDCC0D " + String(prec) + "%, #e3e3e3 " + String(prec) + "%)";
+    document.getElementById("rangeMoneyDotsBuy").style.background = "linear-gradient(to right, #FDCC0D calc(" + String(prec) + "%" + correction + "), #e3e3e3 calc(" + String(prec) + "%" + correction + "))";
+    showPrice(0, document.getElementById("monthRangeBuy").value, newVal);
+  }
+
+  function closest(value) {
+    if (value <= 0) {
+      return 0
+    }
+    if  (value <= 25) {
+      return 1
+    }
+    if (value <= 50) {
+      return 2
+    }
+    if  (value <= 75) {
+      return 3
+    }
+    if (value <= 100) {
+      return 4
+    }
+  }
+
+  function corrector(id, value) {
     let correctionRent = [" + 12", " + 6", " + 0", " - 6", " - 12"];
-    let correctonBuy = [" + 9", " + 4.5", " + 0", " - 4.5", " - 9"];
+    let correctionBuy = [" + 9", " + 4.5", " + 0", " - 4.5", " - 9"];
     if (id === 0) {
       return correctionRent[value] + "px"
     }
     else {
-      return correctonBuy[value] + "px"
+      return correctionBuy[value] + "px"
     }
   }
 
@@ -183,11 +244,15 @@
     }
   }
 
-  var ids = ["rangeMonthDotsRent" ,"rangeMonthDotsBuy", "rangeMoneyDotsBuy"];
+  // dots for the month sliders
+  var ids = ["rangeMonthDotsRent" ,"rangeMonthDotsBuy"];
   window.onload = ids.forEach(dots);
+  window.onload = moneyValues();
+  // setting values for sliders
   window.onload = showVal("monthRangeRent", 36);
   window.onload = showVal("monthRangeBuy", 36);
-  window.onload = showVal("moneyRangeBuy", 36);
+  window.onload = showMoneyVal("moneyRangeBuy", price * 0.1);
+
   window.onload = mobilize();
 </script>
 <style>
@@ -254,7 +319,7 @@
   .tabContent {
     position: relative;
     height: 100%;
-    max-height: calc(100% - 32px);
+    max-height: calc(100% - 37px);
     display: none;
     border-top: none;
   }
@@ -262,26 +327,29 @@
   .vars {
     width: 100%;
     position: relative;
-    height: calc(100% - 35px);
+    height: calc(100% - 30px);
+  }
+
+  .vars>div>div {
+    display: flex;
+    align-items: center;
   }
 
   .sliderTitle {
     position: relative;
-  }
-
-  #sliderTitleRent {
-    height: 50%;
-  }
-
-  #monthSliderTitleBuy {
-    height: 100%;
     width: 40%;
+  }
+
+  #sliderTitleRent.sliderTitle {
+    width: calc(100% - 30px);
+    display: block;
   }
 
   .sliderTitle>p {
     color: #e3e3e3;
     margin: 0;
     font-weight: bold;
+    width: 100%;
   }
 
   #sliderTitleRent>p {
@@ -299,13 +367,14 @@
   .range {
     position: relative;
     -webkit-appearance: none;
-    width: 100%;
     background: transparent;
     outline: none;
     -webkit-transition: .2s;
     transition: opacity .2s;
     z-index: 2;
     margin: 0;
+    width: calc(100% - 9px);
+    padding: 0 4.5px;
   }
 
   .rangeDots {
@@ -315,66 +384,43 @@
     height: 4px;
     position: relative;
     z-index: 1;
+    width: calc(100% - 20px);
+    padding: 0 10px;
+    top: -13.5px
   }
 
   #rangeMonthDotsRent {
-    background: linear-gradient(to right, #FDCC0D 50%, #e3e3e3 50%);
     top: -17px;
-    width: calc(100% - 24px);
-    padding: 0 12px;
   }
 
-  #rangeMonthDotsBuy {
-    position: absolute;
-    top: 45%;
-    width: calc(100% - 30px);
-    padding: 0 10px;
-  }
-
-  #rangeMoneyDotsBuy {
-    position: absolute;
-    top: 45%;
-    width: calc(100% - 30px);
-    padding: 0 10px;
-  }
-
-  .monthSliderBuy {
-    position: relative;
-    height: 100%;
-    padding: 0 5px;
+  .monthSlider {
     width: 40%;
+    padding: 0 10px;
   }
-  
+
+  .monthSlider#monthSliderRent {
+    width: calc(100% - 30px);
+    padding: 0 15px;
+  }
+
   #monthSliderRent {
     position: relative;
-    height: 70%;
+    padding-top: 6px;
+  }
+
+  .slider {
+    width: 100%;
+    height: 18px;
   }
 
   #sliderRent {
     position: relative;
+    width: 100%;
     height: 50%;
-    padding: 5px 10px 0;
   }
 
   #monthRangeRent {
-    width: calc(100% - 17px);
-    padding: 0 8.5px;
-  }
-
-  #monthRangeBuy {
-    position: relative;
-    width: calc(100% - 9px);
-    padding: 0 4.5px;
-  }
-
-  #moneyValBuy {
-    position: relative;
-    width: 20%;
-  }
-
-  #monthValBuy {
-    position: relative;
-    width: 20%;
+    top: -4.5px;
   }
 
   #moneyValBuy>p {
@@ -420,12 +466,13 @@
 
 
 
-  .monthVal {
+  .inputVal {
     position: relative;
     font-weight: bold;
     color: #FDCC0D;
     display: flex;
     justify-content: space-evenly;
+    width: 20%;
   }
 
   #monthVal>p {
@@ -449,21 +496,27 @@
     display: block;
   }
 
+  .variableMobile#monthInputRent {
+    position: relative;
+    height: 100%;
+    display: block;
+  }
+
   .variableMobile>div {
     height: 33%;
-    width: 100%
+    width: calc(100% - 30px);
+    padding: 0 15px;
   }
 
   .amountInput {
     position: relative;
-    height: calc(50% - 20px);
+    height: 50%;
     display: flex;
     justify-content: space-evenly;
-    padding: 10px;
   }
 
-  #moneySliderTitleBuy {
-    width: 40%;
+  #monthInputRent.amountInput {
+    display: block;
   }
 
   #moneySliderTitleBuy>p {
@@ -484,9 +537,6 @@
     padding: 0;
     border: 0;
   }
-  
-
-
 
   div.result {
     width: calc(100% - 20px);
@@ -495,7 +545,7 @@
     bottom: 0;
     height: 35px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     padding: 0 10px;
   }
 
